@@ -18,10 +18,12 @@
 #define SIMPLESOCKET_H_
 
 #include <string>
+#include "TASK3.H"
 #include <arpa/inet.h> //inet_addr
 
 
 using namespace std;
+using namespace TASK3;
 
 /**
  *
@@ -151,7 +153,20 @@ private:
 
 };
 
+class MyTCPserver :public TCPserver{
 
+private:
+
+
+protected:
+
+	World *w_;
+	string myResponse(string);
+
+public:
+	MyTCPserver(int,int);
+
+};
 
 
 #endif /* SIMPLESOCKET_H_ */

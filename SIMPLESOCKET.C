@@ -26,6 +26,7 @@ C++ client example using sockets
 #include <cstring> // contains string functions
 #include <cerrno> //It defines macros for reporting and retrieving error conditions through error codes
 #include <ctime> //contains various functions for manipulating date and time
+#include <sstream>
 
 
 
@@ -191,4 +192,43 @@ string TCPserver::response(string incomingMsg){
 
 string TCPserver::myResponse(string input){
 	return string("NO DATA YET");
+}
+
+MyTCPserver::MyTCPserver(int port,int max):TCPserver(port,max)
+{
+	//AUF KEINEN FALL ENTFERNEN!
+	w_ = new World();
+
+
+}
+
+string MyTCPserver::myResponse(string input)
+{
+	int x,y,r;
+	stringstream ss;
+	//NEW GAME
+	if(input.compare(0,7,"NEWGAME") ==0)
+	{
+		delete w_;
+		w_= new World();
+		return string("OK");
+	}
+
+
+	//CORD
+	if(input.compare(0,6,"COORD[") == 0)
+	{
+		if(2 !=  sscanf(input.c_str(),"COORD[%d,%d]",&x,&y))
+		{
+			cout << r << endl;
+			return string("RES[-1]");
+		}
+
+		r=w_->shoot(x,y);
+		ss << "RES[" << r << "]" << endl;
+		w_->printBoard();
+		return ss.str();
+	}
+
+	return string("UNKNOWN_COMD");
 }
