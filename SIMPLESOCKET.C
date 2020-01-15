@@ -155,6 +155,9 @@ void TCPserver::run(){
 
 	while(1)
 	{
+		for(int i=0; i < maxDataSizeRecv_; i++){
+			dataRecv_ [i]='\0';
+		}
 		read(clintConnt_,dataRecv_, (size_t)maxDataSizeRecv_);
 		output = response(string(dataRecv_));
 		dataSend_ = output.c_str();
@@ -163,7 +166,7 @@ void TCPserver::run(){
 			cout << "asked to close server\n";
 			break;
 		}
-     }
+	}
     close(clintConnt_);
     sleep(1);
 

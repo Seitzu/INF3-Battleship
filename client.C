@@ -26,46 +26,68 @@ int main() {
 	//connect to host
 	c.conn(host , 2021);
 
-/*	int i=0;
-	bool goOn=1;
-	while(goOn){ // send and receive data
-		if((rand() % 20) < i++){
-			msg = string("BYEBYE");
-			goOn = 0;
-		}else{
-			msg = string("client wants this");
-		}*/
-	while(1)
-	{
-		x=(rand() %10)+1;
-		y=(rand() %10)+1;
-
-		msg=coordStr(x,y);
-		//cout << "client sends:" << msg << endl;
-		c.sendData(msg);
-		msg = c.receive(32);
-		//cout << "got response:" << msg << endl;
-		//sleep(1);
-
-		if(1!=sscanf(msg.c_str(),"RES[%d]",&r))
+	//Strategie 1 - Random
+	for(int i=0;i<5000;i++){
+		c.sendData(string("NEWGAME"));
+		c.receive(32);
+		nmbShoots=0;
+		while(1)
 		{
-			cout <<"unknown response: "<<msg<< endl;
-		}
-		else
-		{
-			nmbShoots ++;
-		}
-		if(r==TASK3::GAME_OVER)break;
+			x=(rand() %10)+1;
+			y=(rand() %10)+1;
 
+			msg=coordStr(x,y);
+
+			c.sendData(msg);
+			msg = c.receive(32);
+
+
+			if(1!=sscanf(msg.c_str(),"RES[%d]",&r))
+			{
+				cout <<"unknown response: "<<msg<< endl;
+			}
+			else
+			{
+				nmbShoots ++;
+			}
+			if(r==TASK3::GAME_OVER)break;
+
+		}
+		cout << nmbShoots << endl;
 	}
 
-/*	for(x;x<10;x++)
+	//Strategie2 - Reihenweise
+/*	for(int i=0;i<5000;i++)
 	{
-		for(y;y<10;y++)
-	}
-*/
-	c.sendData(string("BYEBYE"));
-	cout << "Anzahl der notwendigen Züge: "<< nmbShoots << endl;
+		c.sendData(string("NEWGAME"));
+		c.receive(32);
+		nmbShoots=0;
+
+		for(y=1;y<11;y++)
+		{
+			for(x=1;x<11;x++)
+			{
+
+				msg=coordStr(x,y);
+				c.sendData(msg);
+				msg = c.receive(32);
+
+				if(1!=sscanf(msg.c_str(),"RES[%d]",&r))
+				{
+					cout <<"unknown response: "<<msg<< endl;
+				}
+				else
+				{
+					nmbShoots ++;
+				}
+				if(r==TASK3::GAME_OVER)break;
+
+			}
+			if(r==TASK3::GAME_OVER)break;
+
+		}
+		cout << nmbShoots << endl;
+	}*/
 }
 
 string coordStr(int x,int y)
